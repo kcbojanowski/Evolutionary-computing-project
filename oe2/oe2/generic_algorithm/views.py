@@ -9,4 +9,4 @@ def my_view(request):
             pass  # Placeholder for form data processing
     else:
         form = MyForm()
-    return render(request, 'template_name.html', {'form': form})
+    return render(request, 'generic.html', {'form': form})

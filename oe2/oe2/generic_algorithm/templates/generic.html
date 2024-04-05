@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Genetic Algorithm Configuration</title>
+    <!-- Tailwind CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.4/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .dark-mode {
+        background-color: #212129;
+        color: #92ddc8;
+      }
+
+      .form-input,
+      .form-select {
+        background-color: #323949;
+        border-color: #3d3e51;
+        color: white;
+      }
+
+      .form-label {
+        color: #4c5265;
+      }
+
+      .form-button {
+        background-color: #40445a;
+        color: white;
+        border: none;
+      }
+
+      .form-button:hover {
+        background-color: #92ddc8;
+        color: #212129;
+      }
+    </style>
+  </head>
+  <body class="dark-mode">
+    <div
+      class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+    >
+      <div class="max-w-md w-full space-y-8">
+        <div>
+          <h2 class="mt-6 text-center text-3xl font-extrabold text-white">
+            Genetic Algorithm for Finding max/min in Beale Function
+          </h2>
+        </div>
+        <form class="mt-8 space-y-6" action="#" method="POST">
+
+          <div class="rounded-md shadow-sm -space-y-px">
+            <div>
+              <label for="population-size" class="form-label"
+                >Population size</label
+              >
+              <input
+                id="population-size"
+                name="population-size"
+                type="number"
+                autocomplete="off"
+                required
+                class="form-input appearance-none rounded relative block w-full px-3 py-2 border"
+              />
+            </div>
+
+            <div class="my-5">
+              <label for="chromosome-length" class="form-label"
+                >Chromosome length</label
+              >
+              <input
+                id="chromosome-length"
+                name="chromosome-length"
+                type="number"
+                autocomplete="off"
+                required
+                class="form-input appearance-none rounded relative block w-full px-3 py-2 border"
+              />
+            </div>
+
+            <div class="my-5">
+              <label for="mutation-rate" class="form-label"
+                >Mutation rate</label
+              >
+              <input
+                id="mutation-rate"
+                name="mutation-rate"
+                type="number"
+                step="0.01"
+                min="0"
+                max="1"
+                autocomplete="off"
+                required
+                class="form-input appearance-none rounded relative block w-full px-3 py-2 border"
+              />
+            </div>
+
+            <!-- Add more inputs for crossover rate, elite strategy amount, etc., following the same pattern -->
+
+            <div class="my-3">
+              <label for="selection-method" class="form-label"
+                >Selection method</label
+              >
+              <select
+                id="selection-method"
+                name="selection-method"
+                required
+                class="form-select appearance-none rounded block w-full px-3 py-2 border bg-white text-gray-700"
+              >
+                <option value="best">Best</option>
+                <option value="roulette">Roulette</option>
+                <option value="tournament">Tournament</option>
+              </select>
+            </div>
+
+            <div class="my-3">
+              <label for="crossover-type" class="form-label"
+                >Crossover type</label
+              >
+              <select
+                id="crossover-type"
+                name="crossover-type"
+                required
+                class="form-select appearance-none rounded block w-full px-3 py-2 border bg-white text-gray-700"
+              >
+                <option value="one-point">One-point</option>
+                <option value="two-point">Two-point</option>
+                <option value="uniform">Uniform</option>
+              </select>
+            </div>
+
+            <!-- ... other select inputs ... -->
+          </div>
+
+          <div class="flex items-center">
+            <input
+              id="maximization"
+              name="maximization"
+              type="checkbox"
+              class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label
+              for="maximization"
+              class="ml-2 block text-md font-bold text-white"
+            >
+              Maximization
+            </label>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white form-button"
+            >
+              Start
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
