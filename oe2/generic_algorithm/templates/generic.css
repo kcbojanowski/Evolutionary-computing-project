@@ -1,0 +1,26 @@
+.dark-mode {
+    background-color: #212129;
+    color: #92ddc8;
+  }
+
+  .form-input,
+  .form-select {
+    background-color: #323949;
+    border-color: #3d3e51;
+    color: white;
+  }
+
+  .form-label {
+    color: #4c5265;
+  }
+
+  .form-button {
+    background-color: #40445a;
+    color: white;
+    border: none;
+  }
+
+  .form-button:hover {
+    background-color: #92ddc8;
+    color: #212129;
+  }
