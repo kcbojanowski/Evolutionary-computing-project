@@ -1,7 +1,7 @@
 import random
 
-from crossover.crossover import Crossover
-from models.chromosome import Chromosome
+from crossover import Crossover
+from oe2.generic_algorithm.chromosomes.chromosome import Chromosome
 
 
 class UniformCrossover(Crossover):

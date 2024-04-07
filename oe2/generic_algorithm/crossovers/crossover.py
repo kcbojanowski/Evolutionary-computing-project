@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from models.chromosome import Chromosome
+from oe2.generic_algorithm.chromosomes.chromosome import Chromosome
 
 
 class Crossover(ABC):
