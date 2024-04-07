@@ -9,7 +9,7 @@ Clone git repository.
 
 Change the current working directory.
   ```sh
-    cd oe_project_2
+    cd oe_project_2/oe2
   ```
 Migrate django app
   ```sh
