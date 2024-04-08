@@ -1,4 +1,4 @@
-class SelectionMethod:
+class Selection:
 
     def select(self, population, num_select):
         """

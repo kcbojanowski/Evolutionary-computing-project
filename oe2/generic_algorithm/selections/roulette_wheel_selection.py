@@ -1,9 +1,9 @@
 import numpy as np
 
-from oe2.generic_algorithm.selections.selection import SelectionMethod
+from oe2.generic_algorithm.selections.selection import Selection
 
 
-class RouletteWheelSelection(SelectionMethod):
+class RouletteWheelSelection(Selection):
 
     def select(self, population, num_select):
         total_fitness = sum(chromosome.fitness for chromosome in population)

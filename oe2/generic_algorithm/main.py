@@ -15,6 +15,8 @@ ELITE_CHROMOSOME_COUNT = 2
 
 CROSSOVER_RATE = 0.7
 
+EPOCHS_AMOUNT = 100
+
 crossover = SinglePointCrossover()
 
 population = generate_chromosomes(CHROMOSOME_COUNT, CHROMOSOME_SIZE, LEFT_BOUNDARY, RIGHT_BOUNDARY)

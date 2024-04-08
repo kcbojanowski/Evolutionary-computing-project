@@ -1,9 +1,9 @@
 import numpy as np
 
-from oe2.generic_algorithm.selections.selection import SelectionMethod
+from oe2.generic_algorithm.selections.selection import Selection
 
 
-class TournamentSelection(SelectionMethod):
+class TournamentSelection(Selection):
 
     def select(self, population, num_select, tournament_size=3):
         selected = []
