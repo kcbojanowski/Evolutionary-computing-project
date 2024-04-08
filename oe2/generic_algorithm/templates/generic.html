@@ -9,6 +9,35 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.4/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      .dark-mode {
+        background-color: #212129;
+        color: #92ddc8;
+      }
+
+      .form-input,
+      .form-select {
+        background-color: #323949;
+        border-color: #3d3e51;
+        color: white;
+      }
+
+      .form-label {
+        color: #4c5265;
+      }
+
+      .form-button {
+        background-color: #40445a;
+        color: white;
+        border: none;
+      }
+
+      .form-button:hover {
+        background-color: #92ddc8;
+        color: #212129;
+      }
+    </style>
   </head>
   <body class="dark-mode">
     <div
@@ -17,12 +46,52 @@
       <div class="max-w-md w-full space-y-8">
         <div>
           <h2 class="mt-6 text-center text-3xl font-extrabold text-white">
-            Genetic Algorithm for Finding max/min in Beale Function
+            Genetic Algorithm for optimalization
           </h2>
         </div>
-        <form class="mt-8 space-y-6" action="#" method="POST">
-
+        <form class="mt-8 space-y-6" method="POST" id="algorithm-form">
+          {% csrf_token %}
           <div class="rounded-md shadow-sm -space-y-px">
+            <div class="my-3">
+              <label for="function" class="form-label"
+                >Test function</label
+              >
+              <select
+                id="function"
+                name="function"
+                required
+                class="form-select appearance-none rounded block w-full px-3 py-2 border bg-white text-gray-700"
+              >
+                <option value="one-point">Martin and Gady</option>
+                <option value="two-point">Ackley's Function</option>
+              </select>
+            </div>
+            <div>
+              <label for="range-start" class="form-label"
+                >Begin of the range - A</label
+              >
+              <input
+                id="range-start"
+                name="range-start"
+                type="number"
+                autocomplete="off"
+                required
+                class="form-input appearance-none rounded relative block w-full px-3 py-2 border"
+              />
+            </div>
+            <div>
+              <label for="range-end" class="form-label"
+                >End of the range - B</label
+              >
+              <input
+                id="range-end"
+                name="range-end"
+                type="number"
+                autocomplete="off"
+                required
+                class="form-input appearance-none rounded relative block w-full px-3 py-2 border"
+              />
+            </div>
             <div>
               <label for="population-size" class="form-label"
                 >Population size</label
@@ -52,12 +121,88 @@
             </div>
 
             <div class="my-5">
+              <label for="epochs-amount" class="form-label"
+                >Epochs amount</label
+              >
+              <input
+                id="epochs-amount"
+                name="epochs-amount"
+                type="number"
+                autocomplete="off"
+                required
+                class="form-input appearance-none rounded relative block w-full px-3 py-2 border"
+              />
+            </div>
+
+            <div class="my-5">
+              <label for="elite-amount"class="form-label"
+                >Elite Strategy amount</label
+              >
+              <input
+                id="elite-amount"
+                name="elite-amount"
+                type="number"
+                autocomplete="off"
+                required
+                class="form-input appearance-none rounded relative block w-full px-3 py-2 border"
+              />
+            </div>
+
+            <div class="my-5">
+              <label for="chromosome-amount" class="form-label"
+                >Best and tournament chromosome amount</label
+              >
+              <input
+                id="chromosome-amount"
+                name="chromosome-amount"
+                type="number"
+                autocomplete="off"
+                required
+                class="form-input appearance-none rounded relative block w-full px-3 py-2 border"
+              />
+            </div>
+
+            <div class="my-5">
+              <label for="crossover-rate" class="form-label"
+                >Crosover rate</label
+              >
+              <input
+                id="crossover-rate"
+                name="crossover-rate"
+                type="number"
+                step="0.01"
+                min="0"
+                max="1"
+                autocomplete="off"
+                required
+                class="form-input appearance-none rounded relative block w-full px-3 py-2 border"
+              />
+            </div>
+
+            <div class="my-5">
               <label for="mutation-rate" class="form-label"
-                >Mutation rate</label
+                >Mutation probability</label
               >
               <input
                 id="mutation-rate"
                 name="mutation-rate"
+                type="number"
+                step="0.01"
+                min="0"
+                max="1"
+                autocomplete="off"
+                required
+                class="form-input appearance-none rounded relative block w-full px-3 py-2 border"
+              />
+            </div>
+
+            <div class="my-5">
+              <label for="inversion-rate" class="form-label"
+                >inversion rate</label
+              >
+              <input
+                id="inversion-rate"
+                name="inversion-rate"
                 type="number"
                 step="0.01"
                 min="0"
@@ -87,18 +232,36 @@
             </div>
 
             <div class="my-3">
-              <label for="crossover-type" class="form-label"
-                >Crossover type</label
+              <label for="crossover-method" class="form-label"
+                >Crossover method</label
               >
               <select
-                id="crossover-type"
-                name="crossover-type"
+                id="crossover-method"
+                name="crossover-method"
                 required
                 class="form-select appearance-none rounded block w-full px-3 py-2 border bg-white text-gray-700"
               >
                 <option value="one-point">One-point</option>
                 <option value="two-point">Two-point</option>
+                <option value="two-point">Three-point</option>
+                <option value="two-point">Discrete-point</option>
                 <option value="uniform">Uniform</option>
+              </select>
+            </div>
+
+            <div class="my-3">
+              <label for="mutation-method" class="form-label"
+                >Crossover method</label
+              >
+              <select
+                id="mutation-method"
+                name="mutation-method"
+                required
+                class="form-select appearance-none rounded block w-full px-3 py-2 border bg-white text-gray-700"
+              >
+                <option value="one-point">One-point</option>
+                <option value="two-point">Two-point</option>
+                <option value="uniform">Edge</option>
               </select>
             </div>
 
@@ -121,15 +284,35 @@
           </div>
 
           <div>
-            <button
-              type="submit"
-              class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white form-button"
-            >
-              Start
+            <button type="submit" id="submitButton" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white form-button">
+              <span id="buttonText">Start</span>
+              <div id="spinner" class="hidden spinner"></div>
             </button>
           </div>
         </form>
       </div>
     </div>
-  </body>
-</html>
+    
+    <script>
+      $("#algorithm-form").submit(function(e) {
+
+          e.preventDefault(); 
+
+          var form = $(this);
+          var actionUrl = form.attr('action');
+          
+          $.ajax({
+              type: "POST",
+              url: actionUrl,
+              data: form.serialize(),
+              success: function(data){
+                console.log("UDALO SIE")
+                window.location.reload();
+              }
+          });
+          
+      });
+    </script>
+    
+    </body>
+    </html>
