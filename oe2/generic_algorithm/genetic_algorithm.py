@@ -4,6 +4,7 @@ from typing import List, Tuple
 from oe2.generic_algorithm.chromosomes.candidate import generate_candidates, Candidate
 from oe2.generic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
 from oe2.generic_algorithm.inversion.inv import inversion
+from timeit import default_timer as timer
 
 
 class GeneticAlgorithm:
@@ -18,16 +19,19 @@ class GeneticAlgorithm:
             self.configuration.left_boundary,
             self.configuration.right_boundary
         )
-        best = 100
-        x = 100
-        y = 100
 
+        best_candidate_values = []
+        average_epoch_values = []
+        standard_deviations = []
+
+        start = timer()
         for epoch in range(self.configuration.epochs_amount):
             elite_candidates, rest_candidates = self.elite_strategy(population,
                                                                     self.configuration.elite_chromosome_count)
 
-            best = self.configuration.fitness_function.compute(elite_candidates[0])
-            x = elite_candidates[0]
+            best_candidate_values.append(self.configuration.fitness_function.compute(elite_candidates[0]))
+            # average_epoch_value.append(sum())  #TODO
+            # standard_deviations.append()  #TODO
 
             selected_candidates = self.configuration.selection.select(rest_candidates,
                                                                       self.configuration.selection_count,
@@ -37,9 +41,12 @@ class GeneticAlgorithm:
             population = [self.mutated_candidate(candidate) for candidate in population]
             population = [self.inverted_candidate(candidate) for candidate in population]
             population.extend(elite_candidates)
-        print(best)
-        for a in x.chromosomes:
-            print(a.value)
+        end = timer()
+        algorithm_time = end - start
+        print(algorithm_time)
+        print(best_candidate_values)
+        print(average_epoch_values)  #TODO
+        print(standard_deviations)  #TODO
 
     def mutated_candidate(self, candidate: Candidate):
         return Candidate(
@@ -74,7 +81,7 @@ class GeneticAlgorithm:
         - Tuple with selected chromosomes and the rests of them
         """
         sorted_population = sorted(population,
-                                   key=lambda candidate: self.configuration.fitness_function.compute(candidate))
+                                   key=lambda candidate: self.configuration.fitness_function.compute(candidate))  #TODO min/max -> reverse
         selected = sorted_population[:num_select]
         remaining = sorted_population[num_select:]
 

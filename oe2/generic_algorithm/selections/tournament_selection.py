@@ -14,6 +14,6 @@ class TournamentSelection(Selection):
         selected = []
         for _ in range(num_select):
             tournament = random.sample(population, self.tournament_size)
-            winner = max(tournament, key=lambda candidate: fitness_function.compute(candidate))
+            winner = min(tournament, key=lambda candidate: fitness_function.compute(candidate))  #TODO min/max
             selected.append(winner)
         return selected

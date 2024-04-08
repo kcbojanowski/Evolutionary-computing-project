@@ -13,14 +13,14 @@ class GeneticAlgorithmConfiguration:
     selection: Selection
     mutation: Mutation
 
-    left_boundary: float = -20
-    right_boundary: float = 20
+    left_boundary: float = -32.768
+    right_boundary: float = 32.768
     dimensions: int = 2
 
     chromosome_count: int = 200
     chromosome_size: int = 10
 
-    epochs_amount: int = 100
+    epochs_amount: int = 1000
     elite_chromosome_count: int = int(0.05 * chromosome_count)
 
     crossover_rate: float = 0.7

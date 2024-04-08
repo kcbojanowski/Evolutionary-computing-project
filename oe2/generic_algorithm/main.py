@@ -11,7 +11,7 @@ from oe2.generic_algorithm.selections.roulette_wheel_selection import RouletteWh
 from oe2.generic_algorithm.selections.tournament_selection import TournamentSelection
 
 configuration = GeneticAlgorithmConfiguration(
-    MartinAndGaddyFunction(),
+    AckleyFunction(),
     TwoPointCrossover(),
     TournamentSelection(2),
     TwoPointMutation()
