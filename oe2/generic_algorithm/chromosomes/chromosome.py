@@ -3,7 +3,7 @@ from typing import List
 
 
 class Chromosome:
-    def __init__(self, binary_representation: List[int], left_boundary: int, right_boundary: int):
+    def __init__(self, binary_representation: List[int], left_boundary: float, right_boundary: float):
         self.binary_representation = binary_representation
         self.left_boundary = left_boundary
         self.right_boundary = right_boundary
@@ -21,6 +21,6 @@ class Chromosome:
         return str(self.binary_representation)
 
 
-def generate_chromosomes(count: int, chromosome_size: int, left_boundary: int, right_boundary: int) -> List[Chromosome]:
+def generate_chromosomes(count: int, chromosome_size: int, left_boundary: float, right_boundary: float) -> List[Chromosome]:
     return [Chromosome([random.randint(0, 1) for _ in range(chromosome_size)], left_boundary, right_boundary) for _ in
             range(count)]

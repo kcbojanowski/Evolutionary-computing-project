@@ -9,7 +9,7 @@ class Candidate:
     chromosomes: List[Chromosome]
 
 
-def generate_candidates(dimensions: int, count: int, chromosome_size: int, left_boundary: int, right_boundary: int) -> List[Candidate]:
+def generate_candidates(dimensions: int, count: int, chromosome_size: int, left_boundary: float, right_boundary: float) -> List[Candidate]:
     return [Candidate(generate_chromosomes(dimensions, chromosome_size, left_boundary, right_boundary))  for _ in range(count)]
 
 

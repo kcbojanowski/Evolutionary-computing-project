@@ -1,7 +1,7 @@
 import random
 
-from crossover import Crossover
 from oe2.generic_algorithm.chromosomes.chromosome import Chromosome
+from oe2.generic_algorithm.crossovers.crossover import Crossover
 
 
 class ThreePointCrossover(Crossover):
@@ -9,7 +9,6 @@ class ThreePointCrossover(Crossover):
         Crossover.crossover(self, chromosome1, chromosome2)
         crossover_points = random.sample(range(len(chromosome1.binary_representation)), 3)
         crossover_points.sort()
-        print(crossover_points)
         child_binary_representation = (
                 chromosome1.binary_representation[:crossover_points[0]] +
                 chromosome2.binary_representation[crossover_points[0]:crossover_points[1]] +

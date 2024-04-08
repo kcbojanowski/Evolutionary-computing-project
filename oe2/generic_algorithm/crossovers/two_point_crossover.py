@@ -1,7 +1,7 @@
 import random
 
-from crossover import Crossover
 from oe2.generic_algorithm.chromosomes.chromosome import Chromosome
+from oe2.generic_algorithm.crossovers.crossover import Crossover
 
 
 class TwoPointCrossover(Crossover):
