@@ -3,6 +3,7 @@ from typing import List, Tuple
 
 from oe2.generic_algorithm.chromosomes.candidate import generate_candidates, Candidate
 from oe2.generic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
+from oe2.generic_algorithm.inversion.inv import inversion
 
 
 class GeneticAlgorithm:
@@ -21,14 +22,27 @@ class GeneticAlgorithm:
         for epoch in range(self.configuration.epochs_amount):
             elite_candidates, rest_candidates = self.elite_strategy(population,
                                                                     self.configuration.elite_chromosome_count)
-            print(elite_candidates)
-            print(rest_candidates)
+
+            print(self.configuration.fitness_function.compute(elite_candidates[0]))
+
             selected_candidates = self.configuration.selection.select(rest_candidates,
                                                                       self.configuration.selection_count,
                                                                       self.configuration.fitness_function)  # nie wiem czy z populacji calej czy tylko z reszty
 
-            new_population = self.create_new_population(selected_candidates)
-            new_population.extend(elite_candidates)
+            population = self.create_new_population(selected_candidates)
+            population = [self.mutated_candidate(candidate) for candidate in population]
+            population = [self.inverted_candidate(candidate) for candidate in population]
+            population.extend(elite_candidates)
+
+    def mutated_candidate(self, candidate: Candidate):
+        return Candidate(
+            [self.configuration.mutation.mutation(chromosome, self.configuration.mutation_rate) for chromosome in
+             candidate.chromosomes])
+
+    def inverted_candidate(self, candidate: Candidate):
+        return Candidate(
+            [inversion(chromosome, self.configuration.mutation_rate) for chromosome in
+             candidate.chromosomes])
 
     def create_new_population(self, candidates: List[Candidate]) -> List[Candidate]:
         new_population = []

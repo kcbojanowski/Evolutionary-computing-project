@@ -6,7 +6,7 @@ from oe2.generic_algorithm.fitnessfunctions.fitness_function import FitnessFunct
 
 class AckleyFunction(FitnessFunction):
     def compute(self, candidate: Candidate):
-        x = np.array(chromosome.value for chromosome in candidate.chromosomes)
+        x = np.array([chromosome.value for chromosome in candidate.chromosomes])
         dimensions = len(x)
         sum_sq = np.sum(x ** 2)
         sum_cos = np.sum(np.cos(2 * np.pi * x))
