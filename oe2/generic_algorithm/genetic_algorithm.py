@@ -1,3 +1,4 @@
+import random
 from typing import List
 
 from oe2.generic_algorithm.chromosomes.chromosome import generate_chromosomes, Chromosome
@@ -15,19 +16,23 @@ class GeneticAlgorithm:
             self.configuration.left_boundary,
             self.configuration.right_boundary
         )
-        elite_chromosomes, rest_chromosomes = GeneticAlgorithm.elite_strategy(population, self.configuration.elite_chromosome_count)
+        elite_chromosomes, rest_chromosomes = GeneticAlgorithm.elite_strategy(population,
+                                                                              self.configuration.elite_chromosome_count)
+        selected_chromosomes = self.configuration.selection.select(rest_chromosomes,
+                                                                   self.configuration.selection_count)  # nie wiem czy z populacji calej czy tylko z reszty
 
-        # new_population = elite_chromosomes
-        #
-        # selected_chromosomes = self.configuration.selection.select(population, self.configuration.selection_count)  # nie wiem czy z populacji calej czy tylko z reszty
-        #
-        # while len(new_population) < CHROMOSOME_COUNT:
-        #     left, right = random.sample(selected_chromosomes, 2)  # sample czy choice ???
-        #     if random.random() < CROSSOVER_RATE:
-        #         new_population.append(crossover.crossover(left, right))
+        new_population = self.create_new_population(selected_chromosomes)
+        new_population.extend(elite_chromosomes)
 
-    def create_new_population(self):
+    def create_new_population(self, chromosomes: List[Chromosome]) -> List[Chromosome]:
+        new_population = []
+        new_population_size = self.configuration.chromosome_count - self.configuration.elite_chromosome_count
+        while len(new_population) < new_population_size:
+            left, right = random.sample(chromosomes, 2)  # sample czy choice ???
+            if random.random() < self.configuration.crossover_rate:
+                new_population.append(self.configuration.crossover.crossover(left, right))
 
+        return new_population
 
     @staticmethod
     def elite_strategy(population: List[Chromosome], num_select: int) -> tuple[List[Chromosome], List[Chromosome]]:
