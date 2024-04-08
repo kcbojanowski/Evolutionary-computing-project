@@ -6,7 +6,7 @@ class FitnessFunction:
 
 class MartinAndGaddyFunction(FitnessFunction):
     def compute(self, x):
-        term1 = (x[0] - 1 - x[1])**2
+        term1 = (x[0] - x[1])**2
         term2 = (x[0] + x[1] - 10)**2 / 3
         return term1 + term2
 
