@@ -19,3 +19,4 @@ class GeneticAlgorithmConfiguration:
     right_boundary: int = -10
     crossover_rate: float = 0.7
     selection_count: int = 10
+    dimensions = 2

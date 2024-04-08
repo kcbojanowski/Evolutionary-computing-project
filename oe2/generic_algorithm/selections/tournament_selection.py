@@ -1,14 +1,19 @@
-import numpy as np
+import random
+from typing import List
 
+from oe2.generic_algorithm.chromosomes.candidate import Candidate
+from oe2.generic_algorithm.fitnessfunctions.fitness_function import FitnessFunction
 from oe2.generic_algorithm.selections.selection import Selection
 
 
 class TournamentSelection(Selection):
+    def __init__(self, tournament_size: int):
+        self.tournament_size = tournament_size
 
-    def select(self, population, num_select, tournament_size=3):
+    def select(self, population: List[Candidate], num_select: int, fitness_function: FitnessFunction):
         selected = []
         for _ in range(num_select):
-            tournament = np.random.choice(population, size=tournament_size, replace=False)
-            winner = max(tournament, key=lambda chromosome: chromosome.fitness)
+            tournament = random.sample(population, self.tournament_size)
+            winner = max(tournament, key=lambda candidate: fitness_function.compute(candidate))
             selected.append(winner)
         return selected

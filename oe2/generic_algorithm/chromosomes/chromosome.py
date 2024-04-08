@@ -17,6 +17,9 @@ class Chromosome:
     def __str__(self):
         return str(self.binary_representation)
 
+    def __repr__(self):
+        return str(self.binary_representation)
+
 
 def generate_chromosomes(count: int, chromosome_size: int, left_boundary: int, right_boundary: int) -> List[Chromosome]:
     return [Chromosome([random.randint(0, 1) for _ in range(chromosome_size)], left_boundary, right_boundary) for _ in

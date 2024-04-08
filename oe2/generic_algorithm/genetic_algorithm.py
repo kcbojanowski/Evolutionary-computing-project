@@ -1,7 +1,7 @@
 import random
-from typing import List
+from typing import List, Tuple
 
-from oe2.generic_algorithm.chromosomes.chromosome import generate_chromosomes, Chromosome
+from oe2.generic_algorithm.chromosomes.candidate import generate_candidates, Candidate
 from oe2.generic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
 
 
@@ -10,32 +10,37 @@ class GeneticAlgorithm:
         self.configuration = configuration
 
     def perform(self):
-        population = generate_chromosomes(
+        population = generate_candidates(
+            self.configuration.dimensions,
             self.configuration.chromosome_count,
             self.configuration.chromosome_size,
             self.configuration.left_boundary,
             self.configuration.right_boundary
         )
-        elite_chromosomes, rest_chromosomes = GeneticAlgorithm.elite_strategy(population,
-                                                                              self.configuration.elite_chromosome_count)
-        selected_chromosomes = self.configuration.selection.select(rest_chromosomes,
-                                                                   self.configuration.selection_count)  # nie wiem czy z populacji calej czy tylko z reszty
 
-        new_population = self.create_new_population(selected_chromosomes)
-        new_population.extend(elite_chromosomes)
+        for epoch in range(self.configuration.epochs_amount):
+            elite_candidates, rest_candidates = self.elite_strategy(population,
+                                                                    self.configuration.elite_chromosome_count)
+            print(elite_candidates)
+            print(rest_candidates)
+            selected_candidates = self.configuration.selection.select(rest_candidates,
+                                                                      self.configuration.selection_count,
+                                                                      self.configuration.fitness_function)  # nie wiem czy z populacji calej czy tylko z reszty
 
-    def create_new_population(self, chromosomes: List[Chromosome]) -> List[Chromosome]:
+            new_population = self.create_new_population(selected_candidates)
+            new_population.extend(elite_candidates)
+
+    def create_new_population(self, candidates: List[Candidate]) -> List[Candidate]:
         new_population = []
         new_population_size = self.configuration.chromosome_count - self.configuration.elite_chromosome_count
         while len(new_population) < new_population_size:
-            left, right = random.sample(chromosomes, 2)  # sample czy choice ???
+            left, right = random.sample(candidates, 2)  # sample czy choice ???
             if random.random() < self.configuration.crossover_rate:
-                new_population.append(self.configuration.crossover.crossover(left, right))
+                new_population.append(self.configuration.crossover.crossover_candidates(left, right))
 
         return new_population
 
-    @staticmethod
-    def elite_strategy(population: List[Chromosome], num_select: int) -> tuple[List[Chromosome], List[Chromosome]]:
+    def elite_strategy(self, population: List[Candidate], num_select: int) -> Tuple[List[Candidate], List[Candidate]]:
         """
         Split chromosomes to chosen ones and the rest of them
 
@@ -47,8 +52,9 @@ class GeneticAlgorithm:
         Returns:
         - Tuple with selected chromosomes and the rests of them
         """
-
-        sorted_population = sorted(population, key=lambda chromosome: chromosome.fitness, reverse=True)
+        sorted_population = sorted(population,
+                                   key=lambda candidate: self.configuration.fitness_function.compute(candidate),
+                                   reverse=True)
         selected = sorted_population[:num_select]
         remaining = sorted_population[num_select:]
 
