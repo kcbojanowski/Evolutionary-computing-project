@@ -21,13 +21,12 @@ class CpcCrossover(Crossover):
         child_1 = chromosome1.binary_representation.copy()
         child_2 = chromosome2.binary_representation.copy()
 
-        for i in range(l_length):
+        for i in l_up:
             if random.random() < 0.5:
-                if l_up:
-                    pos_lup = l_up[i]
-                    child_1[pos_lup], child_2[pos_lup] = child_2[pos_lup], child_1[pos_lup]
-                if l_down:
-                    pos_ldown = l_down[i]
-                    child_1[pos_ldown], child_2[pos_ldown] = child_2[pos_ldown], child_1[pos_ldown]
+                child_1[i], child_2[i] = child_2[i], child_1[i]
+
+        for i in l_down:
+            if random.random() < 0.5:
+                child_1[i], child_2[i] = child_2[i], child_1[i]
 
         return Chromosome(child_1, chromosome1.left_boundary, chromosome1.right_boundary)
