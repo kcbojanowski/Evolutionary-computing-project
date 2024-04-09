@@ -1,9 +1,10 @@
 import random
+import statistics
 from typing import List, Tuple
 
-from genetic_algorithm.chromosomes.candidate import generate_candidates, Candidate
-from genetic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
-from genetic_algorithm.inversion.inv import inversion
+from oe2.genetic_algorithm.chromosomes.candidate import generate_candidates, Candidate
+from oe2.genetic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
+from oe2.genetic_algorithm.inversion.inv import inversion
 from timeit import default_timer as timer
 
 
@@ -29,9 +30,12 @@ class GeneticAlgorithm:
             elite_candidates, rest_candidates = self.elite_strategy(population,
                                                                     self.configuration.elite_chromosome_count)
 
-            best_candidate_values.append(self.configuration.fitness_function.compute(elite_candidates[0]))
-            # average_epoch_value.append(sum())  #TODO
-            # standard_deviations.append()  #TODO
+            all_fitness_vals = [self.configuration.fitness_function.compute(candidate)
+                                for candidate in population]
+
+            best_candidate_values.append(all_fitness_vals[0])
+            average_epoch_values.append(sum(all_fitness_vals) / len(all_fitness_vals))
+            standard_deviations.append(statistics.stdev(all_fitness_vals))
 
             selected_candidates = self.configuration.selection.select(rest_candidates,
                                                                       self.configuration.selection_count,
@@ -43,10 +47,12 @@ class GeneticAlgorithm:
             population.extend(elite_candidates)
         end = timer()
         algorithm_time = end - start
+
         print(algorithm_time)
         print(best_candidate_values)
-        print(average_epoch_values)  #TODO
-        print(standard_deviations)  #TODO
+        print(average_epoch_values)
+        print(standard_deviations)
+
         return best_candidate_values, standard_deviations, 0, algorithm_time
         
     def mutated_candidate(self, candidate: Candidate):
