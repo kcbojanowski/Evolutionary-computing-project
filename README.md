@@ -42,3 +42,9 @@ Run Django application
   ```sh
     python manage.py runserver
   ```
+
+OR USE DOCKER
+  ```sh
+    docker build -t genetic-algorithm .
+    docker run -it -p genetic-algorithm
+  ```
