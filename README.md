@@ -1,6 +1,12 @@
-# oe_project_2
+# Classical Genetic Algorithm 
 
-**Running instruction**
+## Overview
+
+This project involves the implementation of a classical genetic algorithm within a Django web application. The genetic algorithm is applied to optimization problems, featuring selection, crossover, mutation, and inversion techniques customizable through the web interface.
+
+<img width="1050" alt="image" src="https://github.com/kcbojanowski/oe_project_2/assets/72980071/cce2b619-e426-4ae7-8db6-0290da82d14b">
+
+## Running instruction
 
 Clone git repository.
   ```sh
@@ -43,8 +49,10 @@ Run Django application
     python manage.py runserver
   ```
 
-OR USE DOCKER
-  ```sh
-    docker build -t genetic-algorithm .
-    docker run -it -p genetic-algorithm
-  ```
+## Features
+
+* Implementation of a classical genetic algorithm within a Django framework.
+* Configuration of the genetic algorithm's parameters through the web interface.
+* Customizable genetic operations, including selection, crossover, mutation, and inversion.
+* Visualization of optimization results and algorithm performance
+* History of results arcchived in database as a list, as well as in form of PDF file
