@@ -1,7 +1,7 @@
 import random
 
-from genetic_algorithm.chromosomes.chromosome import Chromosome
-from genetic_algorithm.crossovers.crossover import Crossover
+from oe2.genetic_algorithm.chromosomes.chromosome import Chromosome
+from oe2.genetic_algorithm.crossovers.crossover import Crossover
 
 
 class StableCrossover(Crossover):

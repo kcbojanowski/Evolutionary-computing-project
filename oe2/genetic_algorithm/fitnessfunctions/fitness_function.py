@@ -1,4 +1,4 @@
-from genetic_algorithm.chromosomes.candidate import Candidate
+from oe2.genetic_algorithm.chromosomes.candidate import Candidate
 
 
 class FitnessFunction:

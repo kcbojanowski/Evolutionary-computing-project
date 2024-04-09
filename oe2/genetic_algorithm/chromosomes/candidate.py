@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from genetic_algorithm.chromosomes.chromosome import Chromosome, generate_chromosomes
+from oe2.genetic_algorithm.chromosomes.chromosome import Chromosome, generate_chromosomes
 
 
 @dataclass

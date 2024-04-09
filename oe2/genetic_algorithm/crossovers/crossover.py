@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABC
 
-from genetic_algorithm.chromosomes.candidate import Candidate
-from genetic_algorithm.chromosomes.chromosome import Chromosome
+from oe2.genetic_algorithm.chromosomes.candidate import Candidate
+from oe2.genetic_algorithm.chromosomes.chromosome import Chromosome
 
 
 class Crossover(ABC):

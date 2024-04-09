@@ -1,4 +1,4 @@
-from genetic_algorithm.chromosomes.chromosome import Chromosome
+from oe2.genetic_algorithm.chromosomes.chromosome import Chromosome
 import random
 
 
