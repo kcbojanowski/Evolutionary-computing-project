@@ -212,11 +212,11 @@ def chooseCrossoverMethod(method_name):
             return DiscreteCrossover()
         case 'uniform':
             return UniformCrossover()
-        case 'dlx':
-            return StableCrossover()
         case 'stable':
-            return CpcCrossover()
+            return StableCrossover()
         case 'cpc':
+            return CpcCrossover()
+        case 'dlx':
             return DLX()
         
         
