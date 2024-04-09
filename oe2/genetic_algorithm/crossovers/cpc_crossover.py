@@ -9,12 +9,10 @@ class CpcCrossover(Crossover):
         Crossover.crossover(self, chromosome1, chromosome2)
 
         l_up, l_down = [], []
-        l_length = 0
 
         for i in range(len(chromosome1.binary_representation)):
             if chromosome1.binary_representation[i] > chromosome2.binary_representation[i]:
                 l_up.append(i)
-                l_length += 1
             elif chromosome1.binary_representation[i] < chromosome2.binary_representation[i]:
                 l_down.append(i)
 
