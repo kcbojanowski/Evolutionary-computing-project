@@ -37,9 +37,9 @@ class GeneticAlgorithm:
             average_epoch_values.append(sum(all_fitness_vals) / len(all_fitness_vals))
             standard_deviations.append(statistics.stdev(all_fitness_vals))
 
-            selected_candidates = self.configuration.selection.select(rest_candidates,
+            selected_candidates = self.configuration.selection.select(population,
                                                                       self.configuration.selection_count,
-                                                                      self.configuration.fitness_function)  # nie wiem czy z populacji calej czy tylko z reszty
+                                                                      self.configuration.fitness_function)
 
             population = self.create_new_population(selected_candidates)
             population = [self.mutated_candidate(candidate) for candidate in population]
