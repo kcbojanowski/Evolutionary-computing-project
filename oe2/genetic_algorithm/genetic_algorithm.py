@@ -53,7 +53,7 @@ class GeneticAlgorithm:
         print(average_epoch_values)
         print(standard_deviations)
 
-        return best_candidate_values, standard_deviations, 0, algorithm_time
+        return best_candidate_values, standard_deviations, average_epoch_values, algorithm_time
         
     def mutated_candidate(self, candidate: Candidate):
         return Candidate(
