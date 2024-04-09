@@ -68,7 +68,7 @@ def index(request):
         dimension = 2
         crossover = chooseCrossoverMethod(result.crossover_method)
         mutation = chooseMutationMethod(result.mutation_method)
-        selection = chooseSelectionMethod(result.selection_method, result.selection_amount)
+        selection = chooseSelectionMethod(result.selection_method, result.selection_amount, result.maximization)
 
         algorith_config = GeneticAlgorithmConfiguration(
             fitness_function=fitness_function, 
@@ -86,10 +86,11 @@ def index(request):
             mutation_rate=result.mutation_rate,
             inversion_rate=result.inversion_rate,
             selection_count=result.selection_amount,
+            maximization=result.maximization
         )
         algorithm = GeneticAlgorithm(algorith_config)
 
-        graph1_data, graph2_data, graph3_data, result.total_time = algorithm.perform() ##total time do
+        graph1_data, graph2_data, graph3_data, result.total_time, x = algorithm.perform() ##total time do
 
         pdf_file = generate_pdf(graph1_data, graph2_data, graph3_data, result)
         result.pdf_file.save(f"{result.function}.pdf", ContentFile(pdf_file), save=True)
@@ -216,14 +217,14 @@ def chooseMutationMethod(method_name):
         case 'boundary':
             return BoundaryMutation()
 
-def chooseSelectionMethod(method_name, chromosome_amout ):
+def chooseSelectionMethod(method_name, chromosome_amout, maximization ):
     match method_name:
         case 'best':
-            return BestSelection()
+            return BestSelection(maximization)
         case 'roulette':
             return RouletteWheelSelection()
         case 'tournament':
-            return TournamentSelection(chromosome_amout)
+            return TournamentSelection(chromosome_amout, maximization)
        
        
     

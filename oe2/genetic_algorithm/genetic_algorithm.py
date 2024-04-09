@@ -2,9 +2,9 @@ import random
 import statistics
 from typing import List, Tuple
 
-from oe2.genetic_algorithm.chromosomes.candidate import generate_candidates, Candidate
-from oe2.genetic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
-from oe2.genetic_algorithm.inversion.inv import inversion
+from genetic_algorithm.chromosomes.candidate import generate_candidates, Candidate
+from genetic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
+from genetic_algorithm.inversion.inv import inversion
 from timeit import default_timer as timer
 
 

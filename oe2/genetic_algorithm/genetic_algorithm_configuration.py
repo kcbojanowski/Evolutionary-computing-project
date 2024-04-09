@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from oe2.genetic_algorithm.crossovers.crossover import Crossover
-from oe2.genetic_algorithm.fitnessfunctions.fitness_function import FitnessFunction
-from oe2.genetic_algorithm.mutations.mutations import Mutation
-from oe2.genetic_algorithm.selections.selection import Selection
+from genetic_algorithm.crossovers.crossover import Crossover
+from genetic_algorithm.fitnessfunctions.fitness_function import FitnessFunction
+from genetic_algorithm.mutations.mutations import Mutation
+from genetic_algorithm.selections.selection import Selection
 
 
 class GeneticAlgorithmConfiguration:
