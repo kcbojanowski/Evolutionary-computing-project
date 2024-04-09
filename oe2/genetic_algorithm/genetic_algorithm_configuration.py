@@ -1,31 +1,30 @@
 from dataclasses import dataclass
 
-from genetic_algorithm.crossovers.crossover import Crossover
-from genetic_algorithm.fitnessfunctions.fitness_function import FitnessFunction
-from genetic_algorithm.mutations.mutations import Mutation
-from genetic_algorithm.selections.selection import Selection
-
+from oe2.genetic_algorithm.crossovers.crossover import Crossover
+from oe2.genetic_algorithm.fitnessfunctions.fitness_function import FitnessFunction
+from oe2.genetic_algorithm.mutations.mutations import Mutation
+from oe2.genetic_algorithm.selections.selection import Selection
 
 
 class GeneticAlgorithmConfiguration:
 
-    def __init__(self, 
-                 fitness_function: FitnessFunction, 
-                 crossover: Crossover, 
-                 selection: Selection, 
-                 mutation: Mutation, 
-                 left_boundary: float, 
-                 right_boundary: float, 
-                 dimensions:int,
-                 chromosome_count: int, 
-                 chromosome_size: int, 
+    def __init__(self,
+                 fitness_function: FitnessFunction,
+                 crossover: Crossover,
+                 selection: Selection,
+                 mutation: Mutation,
+                 left_boundary: float,
+                 right_boundary: float,
+                 dimensions: int,
+                 chromosome_count: int,
+                 chromosome_size: int,
                  epochs_amount: int,
-                 elite_chromosome_count: int, 
-                 crossover_rate: float, 
+                 elite_chromosome_count: int,
+                 crossover_rate: float,
                  mutation_rate: float,
-                 inversion_rate: float, 
-                 selection_count: int ):
-        
+                 inversion_rate: float,
+                 selection_count: int,
+                 maximization: bool):
         self.fitness_function = fitness_function
         self.crossover = crossover
         self.selection = selection
@@ -45,3 +44,4 @@ class GeneticAlgorithmConfiguration:
         self.mutation_rate = mutation_rate
         self.inversion_rate = inversion_rate
         self.selection_count = selection_count
+        self.maximization = maximization

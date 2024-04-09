@@ -2,9 +2,9 @@ import random
 import statistics
 from typing import List, Tuple
 
-from genetic_algorithm.chromosomes.candidate import generate_candidates, Candidate
-from genetic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
-from genetic_algorithm.inversion.inv import inversion
+from oe2.genetic_algorithm.chromosomes.candidate import generate_candidates, Candidate
+from oe2.genetic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
+from oe2.genetic_algorithm.inversion.inv import inversion
 from timeit import default_timer as timer
 
 
@@ -59,7 +59,7 @@ class GeneticAlgorithm:
         best_arguments = [chromosome.value for chromosome in best_candidate.chromosomes]
 
         return best_candidate_values, average_epoch_values, standard_deviations, algorithm_time, best_arguments
-        
+
     def mutated_candidate(self, candidate: Candidate):
         return Candidate(
             [self.configuration.mutation.mutation(chromosome, self.configuration.mutation_rate) for chromosome in
@@ -93,7 +93,8 @@ class GeneticAlgorithm:
         - Tuple with selected chromosomes and the rests of them
         """
         sorted_population = sorted(population,
-                                   key=lambda candidate: self.configuration.fitness_function.compute(candidate))  #TODO min/max -> reverse
+                                   key=lambda candidate: self.configuration.fitness_function.compute(candidate),
+                                   reverse=self.configuration.maximization)
         selected = sorted_population[:num_select]
         remaining = sorted_population[num_select:]
 
