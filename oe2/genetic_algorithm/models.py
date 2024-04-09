@@ -13,7 +13,7 @@ class GeneticAlgorithmResult(models.Model):
     chromosome_length = models.IntegerField()
     epochs_amount = models.IntegerField()
     elite_amount = models.IntegerField()
-    chromosome_amount = models.IntegerField()
+    selection_amount = models.IntegerField()
     crossover_rate = models.FloatField()
     mutation_rate = models.FloatField()
     inversion_rate = models.FloatField()
@@ -21,8 +21,7 @@ class GeneticAlgorithmResult(models.Model):
     crossover_method = models.CharField(max_length=100)
     mutation_method = models.CharField(max_length=100)
     maximization = models.BooleanField(default=False)
-    average_time = models.FloatField(null=True, blank=True)
-    maximum_time = models.FloatField(null=True, blank=True)
+    total_time = models.FloatField(null=True, blank=True)
     pdf_file = models.FileField(upload_to='pdf_files/', null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
 

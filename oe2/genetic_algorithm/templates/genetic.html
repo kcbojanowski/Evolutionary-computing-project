@@ -91,7 +91,7 @@
         <a href="{{ latest_result.pdf_file.url }}" class="result block p-4 text-center text-2xl font-bold text-gray-800 hover:text-indigo-600" target="_blank"> <!-- Modified anchor padding -->
           Last Result
           <p class="mt-2 text-sm ">Date: {{ latest_result.date }}</p>
-          <p class="text-sm ">Maximum time: {{ latest_result.maximum_time }}</p>
+          <p class="text-sm ">Total time: {{ latest_result.total_time }}</p>
         </a>
       </div>
       {% endif %}
@@ -141,8 +141,8 @@
           </div>
 
           <div class="">
-            <label for="chromosome-amount" class="form-label">Best and tournament chromosome amount</label>
-            <input id="chromosome-amount" name="chromosome-amount" type="number" autocomplete="off" required value="30"
+            <label for="selection-amount" class="form-label">Best and tournament chromosome amount</label>
+            <input id="selection-amount" name="selection-amount" type="number" autocomplete="off" required value="30"
               class="form-input appearance-none rounded relative block w-full px-3 py-2 border" />
           </div>
 
@@ -186,6 +186,9 @@
               <option value="three-point">Three-point</option>
               <option value="discrete-point">Discrete-point</option>
               <option value="uniform">Uniform</option>
+              <option value="stable">Stable</option>
+              <option value="dlx">DLX</option>
+              <option value="cpc">CPC</option>
             </select>
           </div>
 

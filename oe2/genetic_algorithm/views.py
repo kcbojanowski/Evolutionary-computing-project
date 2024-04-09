@@ -3,6 +3,10 @@ from django.utils import timezone
 from datetime import *
 from django.shortcuts import render, redirect
 import matplotlib
+
+
+
+
 matplotlib.use('agg')
 from matplotlib import pyplot as plt
 
@@ -10,7 +14,6 @@ from genetic_algorithm.models import GeneticAlgorithmResult
 from django.core.files.base import ContentFile
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from reportlab.lib.utils import ImageReader
 from PIL import Image
 
 from genetic_algorithm.crossovers.discrete_crossover import DiscreteCrossover
@@ -25,6 +28,10 @@ from genetic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmCo
 from genetic_algorithm.mutations.mutations import BoundaryMutation, OnePointMutation, TwoPointMutation
 from genetic_algorithm.selections.roulette_wheel_selection import RouletteWheelSelection
 from genetic_algorithm.selections.tournament_selection import TournamentSelection
+from genetic_algorithm.crossovers.DLX_crossover import DLX
+from genetic_algorithm.crossovers.cpc_crossover import CpcCrossover
+from genetic_algorithm.crossovers.stable_crossover import StableCrossover
+from genetic_algorithm.selections.best_selection import BestSelection
 
 
 def index(request):
@@ -44,7 +51,7 @@ def index(request):
             chromosome_length = int(request.POST.get('chromosome-length')),
             epochs_amount = int(request.POST.get('epochs-amount')),
             elite_amount = int(request.POST.get('elite-amount')),
-            chromosome_amount = int(request.POST.get('chromosome-amount')),
+            selection_amount = int(request.POST.get('selection-amount')),
             crossover_rate = float(request.POST.get('crossover-rate')),
             mutation_rate = float(request.POST.get('mutation-rate')),
             inversion_rate = float(request.POST.get('inversion-rate')),
@@ -52,8 +59,7 @@ def index(request):
             crossover_method = request.POST.get('crossover-method'),
             mutation_method = request.POST.get('mutation-method'),
             maximization = bool(request.POST.get('maximization', False)),
-            average_time=None,
-            maximum_time=None,
+            total_time=None,
             pdf_file=None,
         )
 
@@ -62,7 +68,7 @@ def index(request):
         dimension = 2
         crossover = chooseCrossoverMethod(result.crossover_method)
         mutation = chooseMutationMethod(result.mutation_method)
-        selection = chooseSelectionMethod(result.selection_method, result.chromosome_amount)
+        selection = chooseSelectionMethod(result.selection_method, result.selection_amount)
 
         algorith_config = GeneticAlgorithmConfiguration(
             fitness_function=fitness_function, 
@@ -79,11 +85,11 @@ def index(request):
             crossover_rate=result.crossover_rate,
             mutation_rate=result.mutation_rate,
             inversion_rate=result.inversion_rate,
-            selection_count=result.chromosome_amount,
+            selection_count=result.selection_amount,
         )
         algorithm = GeneticAlgorithm(algorith_config)
 
-        graph1_data, graph2_data, graph3_data, result.maximum_time = algorithm.perform() ##total time do
+        graph1_data, graph2_data, graph3_data, result.total_time = algorithm.perform() ##total time do
 
         pdf_file = generate_pdf(graph1_data, graph2_data, graph3_data, result)
         result.pdf_file.save(f"{result.function}.pdf", ContentFile(pdf_file), save=True)
@@ -113,7 +119,7 @@ def generate_pdf(data1, data2, data3, result):
     y -= 20
     c.drawString(100, y, f"Elite Strategy amount: {result.elite_amount}")
     y -= 20
-    c.drawString(100, y, f"Best and tournament chromosome amount: {result.chromosome_amount}")
+    c.drawString(100, y, f"Best and tournament chromosome amount: {result.selection_amount}")
     y -= 20
     c.drawString(100, y, f"Crossover rate: {result.crossover_rate}")
     y -= 20
@@ -162,7 +168,7 @@ def generate_pdf(data1, data2, data3, result):
     y = 400
     plt.plot(indices, data3)
     plt.xlabel('Epoch')
-    plt.ylabel('Average Value')
+    plt.ylabel('Standard Deviations Value')
     plt.title('Dependence of the Average Function Value on the Epoch')
     plt.grid(True)
     plt.savefig('plot3.png', format='png')
@@ -193,6 +199,13 @@ def chooseCrossoverMethod(method_name):
             return DiscreteCrossover()
         case 'uniform':
             return UniformCrossover()
+        case 'dlx':
+            return StableCrossover()
+        case 'stable':
+            return CpcCrossover()
+        case 'cpc':
+            return DLX()
+        
         
 def chooseMutationMethod(method_name):
     match method_name:
@@ -206,7 +219,7 @@ def chooseMutationMethod(method_name):
 def chooseSelectionMethod(method_name, chromosome_amout ):
     match method_name:
         case 'best':
-            return TournamentSelection(chromosome_amout)
+            return BestSelection()
         case 'roulette':
             return RouletteWheelSelection()
         case 'tournament':
