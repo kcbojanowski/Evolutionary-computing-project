@@ -11,9 +11,21 @@ Change the current working directory.
   ```sh
     cd oe_project_2/oe2
   ```
+
+Install requirements
+  ```sh
+    pip install -r requirements.txt
+  ```
+
 Migrate django app
   ```sh
     python manage.py migrate
+  ```
+  ```sh
+    python manage.py makemigrations genetic_algorithm
+  ```
+  ```sh
+    python manage.py migrate genetic_algorithm
   ```
 
 Create superuser for using /admin site
