@@ -182,7 +182,7 @@ def generate_pdf(data1, data2, data3, best_arguments, result):
     plt.plot(indices, data3)
     plt.xlabel('Epoch')
     plt.ylabel('Standard Deviations Value')
-    plt.title('Dependence of the Average Function Value on the Epoch')
+    plt.title('Dependence of the Standard deviation Value on the Epoch')
     plt.grid(True)
     plt.savefig('plot3.png', format='png')
     plt.close()
