@@ -90,15 +90,15 @@ def index(request):
         )
         algorithm = GeneticAlgorithm(algorith_config)
 
-        graph1_data, graph2_data, graph3_data, result.total_time, x = algorithm.perform() ##total time do
+        graph1_data, graph2_data, graph3_data, result.total_time, best_arguments = algorithm.perform() ##total time do
 
-        pdf_file = generate_pdf(graph1_data, graph2_data, graph3_data, result)
+        pdf_file = generate_pdf(graph1_data, graph2_data, graph3_data, best_arguments, result)
         result.pdf_file.save(f"{result.function}.pdf", ContentFile(pdf_file), save=True)
         result.save()
 
         return render(request, 'genetic.html')
     
-def generate_pdf(data1, data2, data3, result):
+def generate_pdf(data1, data2, data3, best_arguments, result):
     buffer = io.BytesIO()
     c = canvas.Canvas(buffer, pagesize=letter)
     y = 750
@@ -135,13 +135,25 @@ def generate_pdf(data1, data2, data3, result):
     c.drawString(100, y, f"Mutation method: {result.mutation_method}")
     y -= 20
     c.drawString(100, y, f"Maximalization: {result.maximization}")
+    y -= 40
+
+
+    c.setFont("Helvetica", 16)
+    if result.maximization:
+        c.drawString(100, y, f"Maximum Value: {data1[len(data1)-1]}")
+        y -= 20
+        c.drawString(100, y, f"Arguments : {best_arguments}")
+    else:
+        c.drawString(100, y, f"Minimum Value: {data1[len(data1)-1]}")
+        y -= 30
+        c.drawString(100, y, f"Arguments : {best_arguments}")
     
    
     c.showPage()
     y = 730
     c.setFont("Helvetica", 16)
     c.drawString(100, y, f"Graphs:")
-    y -= 350
+    y -= 300
 
     indices = range(len(data1))
     
