@@ -2,9 +2,9 @@ import random
 import statistics
 from typing import List, Tuple
 
-from oe2.genetic_algorithm.chromosomes.candidate import generate_candidates, Candidate
-from oe2.genetic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
-from oe2.genetic_algorithm.inversion.inv import inversion
+from genetic_algorithm.chromosomes.candidate import generate_candidates, Candidate
+from genetic_algorithm.genetic_algorithm_configuration import GeneticAlgorithmConfiguration
+from genetic_algorithm.inversion.inv import inversion
 from timeit import default_timer as timer
 
 
@@ -33,7 +33,7 @@ class GeneticAlgorithm:
             all_fitness_vals = [self.configuration.fitness_function.compute(candidate)
                                 for candidate in population]
 
-            best_candidate_values.append(all_fitness_vals[0])
+            best_candidate_values.append(self.configuration.fitness_function.compute(elite_candidates[0]))
             average_epoch_values.append(sum(all_fitness_vals) / len(all_fitness_vals))
             standard_deviations.append(statistics.stdev(all_fitness_vals))
 
@@ -48,12 +48,12 @@ class GeneticAlgorithm:
         end = timer()
         algorithm_time = end - start
 
-        print(algorithm_time)
+        # print(algorithm_time)
         print(best_candidate_values)
-        print(average_epoch_values)
-        print(standard_deviations)
+        # print(average_epoch_values)
+        # print(standard_deviations)
 
-        return best_candidate_values, standard_deviations, average_epoch_values, algorithm_time
+        return best_candidate_values, average_epoch_values, standard_deviations, algorithm_time
         
     def mutated_candidate(self, candidate: Candidate):
         return Candidate(

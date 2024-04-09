@@ -2,11 +2,16 @@ import io
 from django.utils import timezone
 from datetime import *
 from django.shortcuts import render, redirect
+import matplotlib
+matplotlib.use('agg')
+from matplotlib import pyplot as plt
 
 from genetic_algorithm.models import GeneticAlgorithmResult
 from django.core.files.base import ContentFile
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+from PIL import Image
 
 from genetic_algorithm.crossovers.discrete_crossover import DiscreteCrossover
 from genetic_algorithm.crossovers.single_point_crossover import SinglePointCrossover
@@ -24,9 +29,9 @@ from genetic_algorithm.selections.tournament_selection import TournamentSelectio
 
 def index(request):
     if request.method == 'GET':
-        latest_result = GeneticAlgorithmResult.objects.all()
+        latest_result = GeneticAlgorithmResult.objects.order_by('-date').first()
         if latest_result:
-            return render(request, 'genetic.html', {'latest_result': latest_result[0]})
+            return render(request, 'genetic.html', {'latest_result': latest_result})
         else:
             return render(request, 'genetic.html')
     
@@ -54,10 +59,10 @@ def index(request):
 
 
         fitness_function = chooseFitnessFunction(result.function)
-        dimension = 2,
+        dimension = 2
         crossover = chooseCrossoverMethod(result.crossover_method)
         mutation = chooseMutationMethod(result.mutation_method)
-        selection = chooseSelectionMethod(result.selection_method, result.selection_method)
+        selection = chooseSelectionMethod(result.selection_method, result.chromosome_amount)
 
         algorith_config = GeneticAlgorithmConfiguration(
             fitness_function=fitness_function, 
@@ -78,23 +83,21 @@ def index(request):
         )
         algorithm = GeneticAlgorithm(algorith_config)
 
-        graph1_data, graph2_data, result.average_time, result.maximum_time = algorithm.perform()
-        
-        print(graph1_data, graph2_data)
+        graph1_data, graph2_data, graph3_data, result.maximum_time = algorithm.perform() ##total time do
 
-        pdf_file = generate_pdf(0, 0, result)
+        pdf_file = generate_pdf(graph1_data, graph2_data, graph3_data, result)
         result.pdf_file.save(f"{result.function}.pdf", ContentFile(pdf_file), save=True)
         result.save()
 
         return render(request, 'genetic.html')
     
-def generate_pdf(data1, data2, result):
+def generate_pdf(data1, data2, data3, result):
     buffer = io.BytesIO()
     c = canvas.Canvas(buffer, pagesize=letter)
-    c.setFont("Helvetica", 16)
     y = 750
+    c.setFont("Helvetica", 16)
     c.drawString(100, y, "Algorithm Configuration:")
-    y -= 20
+    y -= 40
     c.setFont("Helvetica", 12)
     c.drawString(100, y, f"Function: {result.function}")
     y -= 20
@@ -112,7 +115,7 @@ def generate_pdf(data1, data2, result):
     y -= 20
     c.drawString(100, y, f"Best and tournament chromosome amount: {result.chromosome_amount}")
     y -= 20
-    c.drawString(100, y, f"Crosover rate: {result.crossover_rate}")
+    c.drawString(100, y, f"Crossover rate: {result.crossover_rate}")
     y -= 20
     c.drawString(100, y, f"Mutation rate: {result.mutation_rate}")
     y -= 20
@@ -125,19 +128,57 @@ def generate_pdf(data1, data2, result):
     c.drawString(100, y, f"Mutation method: {result.mutation_method}")
     y -= 20
     c.drawString(100, y, f"Maximalization: {result.maximization}")
-    y -= 20
+    
+   
+    c.showPage()
+    y = 730
+    c.setFont("Helvetica", 16)
+    c.drawString(100, y, f"Graphs:")
+    y -= 350
+
+    indices = range(len(data1))
+    
+    plt.plot(indices, data1)
+    plt.xlabel('Epoch')
+    plt.ylabel('Best Value')
+    plt.title('Dependence of the Best Function Value on the Epoch')
+    plt.grid(True)
+    plt.savefig('plot1.png', format='png')
+    plt.close()
+    c.drawImage('plot1.png', 100, y, width=400, height=300)
+
+    y -= 350
+
+    plt.plot(indices, data2)
+    plt.xlabel('Epoch')
+    plt.ylabel('Average Value')
+    plt.title('Dependence of the Average Function Value on the Epoch')
+    plt.grid(True)
+    plt.savefig('plot2.png', format='png')
+    plt.close()
+    c.drawImage('plot2.png', 100, y, width=400, height=300)
+
+    c.showPage()
+    y = 400
+    plt.plot(indices, data3)
+    plt.xlabel('Epoch')
+    plt.ylabel('Average Value')
+    plt.title('Dependence of the Average Function Value on the Epoch')
+    plt.grid(True)
+    plt.savefig('plot3.png', format='png')
+    plt.close()
+    c.drawImage('plot3.png', 100, y, width=400, height=300)
+    
     c.save()
     pdf_content = buffer.getvalue()
     buffer.close()
     return pdf_content
 
-def generate_graphs(data1,data2):
-    pass
 
 def chooseFitnessFunction(function_name):
-    if function_name == '':
+    if function_name == 'martin-and-gady':
         return MartinAndGaddyFunction()
-    elif function_name == '':
+    elif function_name == 'ackleys-function':
         return AckleyFunction()
     
 def chooseCrossoverMethod(method_name):

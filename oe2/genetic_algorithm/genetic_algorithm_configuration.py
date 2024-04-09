@@ -6,7 +6,7 @@ from genetic_algorithm.mutations.mutations import Mutation
 from genetic_algorithm.selections.selection import Selection
 
 
-@dataclass
+
 class GeneticAlgorithmConfiguration:
 
     def __init__(self, 

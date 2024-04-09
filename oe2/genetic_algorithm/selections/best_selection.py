@@ -1,9 +1,9 @@
 import random
 from typing import List
 
-from oe2.genetic_algorithm.chromosomes.candidate import Candidate
-from oe2.genetic_algorithm.fitnessfunctions.fitness_function import FitnessFunction
-from oe2.genetic_algorithm.selections.selection import Selection
+from genetic_algorithm.chromosomes.candidate import Candidate
+from genetic_algorithm.fitnessfunctions.fitness_function import FitnessFunction
+from genetic_algorithm.selections.selection import Selection
 
 
 class BestSelection(Selection):
