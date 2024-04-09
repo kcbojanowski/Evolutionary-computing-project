@@ -25,6 +25,8 @@ class GeneticAlgorithm:
         average_epoch_values = []
         standard_deviations = []
 
+        best_candidate = Candidate(None)
+
         start = timer()
         for epoch in range(self.configuration.epochs_amount):
             elite_candidates, rest_candidates = self.elite_strategy(population,
@@ -33,6 +35,7 @@ class GeneticAlgorithm:
             all_fitness_vals = [self.configuration.fitness_function.compute(candidate)
                                 for candidate in population]
 
+            best_candidate = elite_candidates[0]
             best_candidate_values.append(self.configuration.fitness_function.compute(elite_candidates[0]))
             average_epoch_values.append(sum(all_fitness_vals) / len(all_fitness_vals))
             standard_deviations.append(statistics.stdev(all_fitness_vals))
@@ -53,7 +56,9 @@ class GeneticAlgorithm:
         # print(average_epoch_values)
         # print(standard_deviations)
 
-        return best_candidate_values, average_epoch_values, standard_deviations, algorithm_time
+        best_arguments = [chromosome.value for chromosome in best_candidate.chromosomes]
+
+        return best_candidate_values, average_epoch_values, standard_deviations, algorithm_time, best_arguments
         
     def mutated_candidate(self, candidate: Candidate):
         return Candidate(
