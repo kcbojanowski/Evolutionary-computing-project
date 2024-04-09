@@ -9,12 +9,17 @@ Clone git repository.
 
 Change the current working directory.
   ```sh
-    cd oe_project_2/oe2
+    cd oe_project_2/
   ```
 
 Install requirements
   ```sh
     pip install -r requirements.txt
+  ```
+
+Change the current working directory.
+  ```sh
+    cd oe_project_2/oe2
   ```
 
 Migrate django app
