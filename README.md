@@ -38,6 +38,12 @@ Migrate django app
   ```sh
     python manage.py migrate genetic_algorithm
   ```
+  ```sh
+    python manage.py makemigrations real_genetic_algorithm
+  ```
+  ```sh
+    python manage.py migrate real_genetic_algorithm
+  ```
 
 Create superuser for using /admin site
   ```sh
