@@ -22,5 +22,4 @@ class Chromosome:
 
 
 def generate_chromosomes(count: int, chromosome_size: int, left_boundary: float, right_boundary: float) -> List[Chromosome]:
-    return [Chromosome([random.randint(0, 1) for _ in range(chromosome_size)], left_boundary, right_boundary) for _ in
-            range(count)]
+    return [Chromosome([random.randint(0, 1) for _ in range(chromosome_size)], left_boundary, right_boundary) for _ in range(count)]

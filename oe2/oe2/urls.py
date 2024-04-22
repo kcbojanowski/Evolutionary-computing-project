@@ -19,8 +19,11 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from genetic_algorithm import views
+from real_genetic_algorithm import views as v
 
 urlpatterns = [
-    path('', views.index, name="index"),
+    path('', v.index, name="index"),
+    path('real_genetic_algorithm', v.real_genetic_algorithm, name="real_genetic_algorithm"),
+    path('genetic_algorithm', views.genetic, name="genetic_algorithm"),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

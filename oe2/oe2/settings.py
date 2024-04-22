@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'genetic_algorithm'
+    'genetic_algorithm',
+    'real_genetic_algorithm'
 ]
 
 MIDDLEWARE = [

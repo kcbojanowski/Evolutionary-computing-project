@@ -34,7 +34,7 @@ from genetic_algorithm.crossovers.stable_crossover import StableCrossover
 from genetic_algorithm.selections.best_selection import BestSelection
 
 
-def index(request):
+def genetic(request):
     if request.method == 'GET':
         latest_result = GeneticAlgorithmResult.objects.order_by('-date').first()
         if latest_result:
@@ -97,6 +97,8 @@ def index(request):
         result.save()
 
         return render(request, 'genetic.html')
+    
+
     
 def generate_pdf(data1, data2, data3, best_arguments, result):
     buffer = io.BytesIO()

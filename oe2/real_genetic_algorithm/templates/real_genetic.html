@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Genetic Algorithm Configuration</title>
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.4/dist/tailwind.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    h2 {
+      margin-bottom: 2rem;
+    }
+    .dark-mode {
+      background-color: #212129;
+      color: #92ddc8;
+    }
+
+    .form-input,
+    .form-select {
+      background-color: #323949;
+      border-color: #3d3e51;
+      color: white;
+    }
+
+    .form-label {
+      color: #4c5265;
+    }
+
+    .form-button {
+      background-color: #40445a;
+      color: white;
+      border: none;
+    }
+
+    .form-button:hover {
+      background-color: #92ddc8;
+      color: #212129;
+    }
+
+    .result{
+      background-color: #323949;
+      color: white;
+    }
+
+    p{
+      color: white;
+    }
+
+    .spinner {
+      border: 8px solid rgba(0, 0, 0, 0.3);
+      border-radius: 50%;
+      border-top: 8px solid #ffffff;
+      width: 60px;
+      height: 60px;
+      -webkit-animation: spin 1s linear infinite;
+      animation: spin 1s linear infinite;
+    }
+
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body class="dark-mode">
+  <div class="min-h-screen flex items-center justify-center py-6 px-8 sm:px-12 lg:px-16">
+    <div class="max-w-4xl w-full space-y-4"> <!-- Modified width -->
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-white">
+          Genetic Algorithm for optimalization <br>
+          with chromosome real representation
+        </h2>
+      </div>
+
+      {%if latest_result %}
+      <div class="mt-8 max-w-4xl w-full rounded-lg shadow-lg overflow-hidden"> <!-- Modified padding and overflow -->
+        <a href="{{ latest_result.pdf_file.url }}" class="result block p-4 text-center text-2xl font-bold text-gray-800 hover:text-indigo-600" target="_blank"> <!-- Modified anchor padding -->
+          Last Result
+          <p class="mt-2 text-sm ">Date: {{ latest_result.date }}</p>
+          <p class="text-sm ">Total time: {{ latest_result.total_time }}</p>
+        </a>
+      </div>
+      {% endif %}
+      <form class="mt-8 space-y-3" method="POST" id="algorithm-form">
+        {% csrf_token %}
+        <div class="grid grid-cols-2 gap-4"> <!-- Added grid for two columns -->
+          <div class="">
+            <label for="function" class="form-label">Test function</label>
+            <select id="function" name="function" required
+              class="form-select appearance-none rounded block w-full px-3 py-2 border bg-white text-gray-700">
+              <option value="martin-and-gady">Martin and Gady</option>
+              <option value="ackleys-function">Ackley's Function</option>
+            </select>
+          </div>
+          <div class="">
+            <label for="range-start" class="form-label">Begin of the range - A</label>
+            <input id="range-start" name="range-start" type="number" step="0.001" autocomplete="off"  required
+              class="form-input appearance-none rounded relative block w-full px-3 py-2 border" value="-20"/>
+          </div>
+          <div class="">
+            <label for="range-end" class="form-label">End of the range - B</label>
+            <input id="range-end" name="range-end" type="number" step="0.001" autocomplete="off" required value="20"
+              class="form-input appearance-none rounded relative block w-full px-3 py-2 border" />
+          </div>
+          <div class="">
+            <label for="population-size" class="form-label">Population size</label>
+            <input id="population-size" name="population-size" type="number" autocomplete="off" required value="100"
+              class="form-input appearance-none rounded relative block w-full px-3 py-2 border" />
+          </div>
+
+          <div class="">
+            <label for="chromosome-dimension" class="form-label">Chromosome Dimension</label>
+            <input id="chromosome-dimension" name="chromosome-dimension" type="number" autocomplete="off" required value="10"
+              class="form-input appearance-none rounded relative block w-full px-3 py-2 border" />
+          </div>
+
+          <div class="">
+            <label for="epochs-amount" class="form-label">Epochs amount</label>
+            <input id="epochs-amount" name="epochs-amount" type="number" autocomplete="off" required value="100"
+              class="form-input appearance-none rounded relative block w-full px-3 py-2 border" />
+          </div>
+
+          <div class="">
+            <label for="elite-amount" class="form-label">Elite Strategy amount</label>
+            <input id="elite-amount" name="elite-amount" type="number" autocomplete="off" required value="10"
+              class="form-input appearance-none rounded relative block w-full px-3 py-2 border" />
+          </div>
+
+          <div class="">
+            <label for="selection-amount" class="form-label">Selection amount</label>
+            <input id="selection-amount" name="selection-amount" type="number" autocomplete="off" required value="50"
+              class="form-input appearance-none rounded relative block w-full px-3 py-2 border" />
+          </div>
+
+          <div class="">
+            <label for="crossover-rate" class="form-label">Crosover rate</label>
+            <input id="crossover-rate" name="crossover-rate" type="number" step="0.01" min="0" max="1"
+              autocomplete="off" required value="0.9"
+              class="form-input appearance-none rounded relative block w-full px-3 py-2 border" />
+          </div>
+
+          <div class="">
+            <label for="mutation-rate" class="form-label">Mutation Rate</label>
+            <input id="mutation-rate" name="mutation-rate" type="number" step="0.01" min="0" max="1" autocomplete="off"
+              value="0.1"
+              required class="form-input appearance-none rounded relative block w-full px-3 py-2 border" />
+          </div>
+
+          <div class="">
+            <label for="inversion-rate" class="form-label">Inversion rate</label>
+            <input id="inversion-rate" name="inversion-rate" type="number" step="0.01" min="0" max="1"
+              autocomplete="off" required value="0.1"
+              class="form-input appearance-none rounded relative block w-full px-3 py-2 border" />
+          </div>
+
+          <div class="">
+            <label for="selection-method" class="form-label">Selection method</label>
+            <select id="selection-method" name="selection-method" required
+              class="form-select appearance-none rounded block w-full px-3 py-2 border bg-white text-gray-700">
+              <option value="best">Best</option>
+              <option value="roulette">Roulette</option>
+              <option value="tournament">Tournament</option>
+            </select>
+          </div>
+
+          <div class="">
+            <label for="crossover-method" class="form-label">Crossover method</label>
+            <select id="crossover-method" name="crossover-method" required
+              class="form-select appearance-none rounded block w-full px-3 py-2 border bg-white text-gray-700">
+              <option value="arithmetic">Arithmetic</option>
+              <option value="average">Average</option>
+              <option value="alfa">Blend type Alpha</option>
+              <option value="alfa-beta">Blend type Alpha&Beta</option>
+              <option value="linear">Linear</option>
+              
+            </select>
+          </div>
+
+          <div class="">
+            <label for="mutation-method" class="form-label">Mutation method</label>
+            <select id="mutation-method" name="mutation-method" required
+              class="form-select appearance-none rounded block w-full px-3 py-2 border bg-white text-gray-700">
+              <option value="uniform">Uniform</option>
+              <option value="gauss">Gauss</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="flex items-center">
+          <input id="maximization" name="maximization" type="checkbox"
+            class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+          <label for="maximization" class="ml-2 block text-md font-bold text-white">
+            Maximization
+          </label>
+        </div>
+        <div>
+          <button type="submit" id="submitButton"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white form-button">
+            <span id="buttonText">Start</span>
+          </button>
+        </div>
+      </form>
+      <div id="overlay"
+        class="hidden fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 z-9999 flex items-center justify-center">
+        <div id="spinner" class="spinner"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $("#algorithm-form").submit(function (e) {
+
+      e.preventDefault();
+
+      var form = $(this);
+      var actionUrl = form.attr('action');
+
+      $("#overlay").removeClass("hidden");
+
+      $.ajax({
+        type: "POST",
+        url: actionUrl,
+        data: form.serialize(),
+        success: function (data) {
+          $("#overlay").addClass("hidden");
+          window.location.reload();
+        }
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>
