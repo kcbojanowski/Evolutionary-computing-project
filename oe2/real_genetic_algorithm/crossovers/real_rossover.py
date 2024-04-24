@@ -12,10 +12,10 @@ class RealCrossover(ABC):
             raise ValueError("N")
         return None
 
-    def crossover_candidates(self, first_candidate: RealCandidates, second_candidate: RealCandidates) -> RealCandidates:
+    def crossover_candidates(self, first_candidate: RealCandidates, second_candidate: RealCandidates, fitness_function: str) -> RealCandidates:
         crossed_chromosomes = []
         for i in range(len(first_candidate.chromosomes)):
-            children = self.crossover(first_candidate.chromosomes[i], second_candidate.chromosomes[i])
+            children = self.crossover(first_candidate.chromosomes[i], second_candidate.chromosomes[i], fitness_function)
             crossed_chromosomes.append(children[0])
             crossed_chromosomes.append(children[1])
         return RealCandidates(crossed_chromosomes)
