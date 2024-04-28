@@ -1,6 +1,6 @@
 import random
 from typing import List
-
+import benchmark_functions as bf
 
 class RealChromosome:
     def __init__(self, real_representation: List[float], fitness_function: str):
@@ -8,14 +8,13 @@ class RealChromosome:
         self.real_representation = real_representation
         self.value = self.calculate_value()
 
-    #TODO add fitness funciton and calculate value
     def calculate_value(self):
         value: float = 0
         match self.fitness_function:
             case 'martin-and-gady':
-                pass #TODO return the real martin and gady function value for chromosome from some py package 
+                value = bf.MartinGaddy()._evaluate(self.real_representation)
             case 'ackleys-function':
-                pass #TODO return the real ackleys function value for chromosome from some py package  
+                value = bf.Ackley()._evaluate(self.real_representation)
         return value
 
     def __str__(self):
