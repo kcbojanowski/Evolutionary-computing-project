@@ -1,11 +1,11 @@
-import random
 import statistics
-from typing import List, Tuple
+import random
 
 from timeit import default_timer as timer
 
 from real_genetic_algorithm.real_genetic_algorithm_configuration import RealGeneticAlgorithmConfiguration
 from real_genetic_algorithm.chromosomes.real_chromosome import generate_real_chromosomes
+from real_genetic_algorithm.inversion.real_inversion import inversion
 
 
 class RealGeneticAlgorithm:
@@ -25,29 +25,30 @@ class RealGeneticAlgorithm:
         best_candidate = self.calculate_best_value(population)
         start = timer()
         for _ in range(self.configuration.epochs_amount):
+            # Select elite
+            elite_individuals = self.elite_strategy(population, self.configuration.elite_chromosome_count)
+
             # Select parents
             parents = self.configuration.selection.select(population, self.configuration.selection_count,
                                                           self.configuration.fitness_function,
                                                           self.configuration.maximization)
 
-            # Generate offspring through crossover
-            offspring = []
-            for p1, p2 in zip(parents[::2], parents[1::2]):
-                offspring.extend(self.configuration.crossover.crossover(p1, p2, self.configuration.fitness_function))
+            offspring = self.create_new_population(parents)
 
             # Perform mutation
             offspring = [self.configuration.mutation.mutation(child, self.configuration.mutation_rate) for child in
                          offspring]
 
+            # Perform inversion
+            offspring = [inversion(child, self.configuration.mutation_rate, self.configuration.left_boundary,
+                                   self.configuration.right_boundary) for child in offspring]
+
             # Evaluate fitness
             for individual in offspring:
                 individual.calculate_value()
 
-            # Select for the next generation
-            population = self.configuration.selection.select(population + offspring,
-                                                             self.configuration.selection_count,
-                                                             self.configuration.fitness_function,
-                                                             self.configuration.maximization)
+            offspring.extend(elite_individuals)
+            population = offspring
 
             current_best = self.calculate_best_value(population)
             if self.configuration.maximization:
@@ -78,3 +79,20 @@ class RealGeneticAlgorithm:
 
     def calculate_std_value(self, population):
         return statistics.pstdev([individual.calculate_value() for individual in population])
+
+    def create_new_population(self, candidates):
+        new_population = []
+        new_population_size = self.configuration.population_size - self.configuration.elite_chromosome_count
+        while len(new_population) < new_population_size:
+            left, right = random.sample(candidates, 2)
+            if random.random() < self.configuration.crossover_rate:
+                new_population.extend(
+                    self.configuration.crossover.crossover(left, right, self.configuration.fitness_function))
+        return new_population
+
+    def elite_strategy(self, population, num_select: int):
+        sorted_population = sorted(population,
+                                   key=lambda individual: individual.calculate_value(),
+                                   reverse=self.configuration.maximization)
+        selected = sorted_population[:num_select]
+        return selected
