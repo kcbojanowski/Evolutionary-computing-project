@@ -31,9 +31,9 @@ class RealGeneticAlgorithmConfiguration:
 
         self.left_boundary = left_boundary
         self.right_boundary = right_boundary
-        self.dimensions = dimensions
+        self.chromosome_dimension = dimensions
 
-        self.chromosome_count = population_size
+        self.population_size = population_size
 
         self.epochs_amount = epochs_amount
         self.elite_chromosome_count = elite_chromosome_count

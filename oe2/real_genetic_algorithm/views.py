@@ -15,7 +15,7 @@ from real_genetic_algorithm.crossovers.blend_alpha_beta_crossover import BlendAl
 from real_genetic_algorithm.crossovers.blend_alpha_crossover import BlendAlphaCrossover
 from real_genetic_algorithm.crossovers.linear_crossover import LinearCrossover
 from real_genetic_algorithm.models import RealGeneticAlgorithmResult
-from real_genetic_algorithm.mutations.real_mutations import GaussMuation, UniformMutation
+from real_genetic_algorithm.mutations.real_mutations import GaussMutation, UniformMutation
 from real_genetic_algorithm.real_genetic_algorithm import RealGeneticAlgorithm
 from real_genetic_algorithm.real_genetic_algorithm_configuration import RealGeneticAlgorithmConfiguration
 from real_genetic_algorithm.selections.real_selection import RealBestSelection, RealRouletteWheelSelection, RealTournamentSelection
@@ -58,21 +58,19 @@ def real_genetic_algorithm(request):
         print(result)
 
         fitness_function = result.function
-        dimension = 2
         crossover = chooseCrossoverMethod(result.crossover_method)
         mutation = chooseMutationMethod(result.mutation_method)
         selection = chooseSelectionMethod(result.selection_method, result.selection_amount, result.maximization)
 
-        algorith_config = RealGeneticAlgorithmConfiguration(
+        algorithm_config = RealGeneticAlgorithmConfiguration(
             fitness_function=fitness_function, ##remember that fitnessfunction is a string now
             crossover=crossover, 
             mutation=mutation, 
             selection=selection,
             left_boundary=result.range_start,
             right_boundary=result.range_end,
-            dimensions=dimension,
-            chromosome_count=result.population_size,
-            chromosome_size=result.chromosome_dimension,
+            dimensions=result.chromosome_dimension,
+            population_size=result.population_size,
             epochs_amount=result.epochs_amount,
             elite_chromosome_count=result.elite_amount,
             crossover_rate=result.crossover_rate,
@@ -82,17 +80,15 @@ def real_genetic_algorithm(request):
             maximization=result.maximization
         )
 
-        #algorithm = RealGeneticAlgorithm(algorith_config)
+        algorithm = RealGeneticAlgorithm(algorithm_config)
 
-        #graph1_data, graph2_data, graph3_data, result.total_time, best_arguments = algorithm.perform() ##total time do
+        graph1_data, graph2_data, graph3_data, result.total_time, best_arguments = algorithm.perform() ##total time do
 
-        #pdf_file = generate_pdf(graph1_data, graph2_data, graph3_data, best_arguments, result)
-        #result.pdf_file.save(f"{result.function}.pdf", ContentFile(pdf_file), save=True)
-        #result.save()
+        pdf_file = generate_pdf(graph1_data, graph2_data, graph3_data, best_arguments, result)
+        result.pdf_file.save(f"{result.function}.pdf", ContentFile(pdf_file), save=True)
+        result.save()
 
         return render(request, 'genetic.html')
-    
-
     
 def generate_pdf(data1, data2, data3, best_arguments, result):
     buffer = io.BytesIO()
@@ -133,61 +129,59 @@ def generate_pdf(data1, data2, data3, best_arguments, result):
     c.drawString(100, y, f"Maximalization: {result.maximization}")
     y -= 40
 
-    #TODO uncomment those lines when algorithm will be ready
-
-    # c.setFont("Helvetica", 16)
-    # if result.maximization:
-    #     c.drawString(100, y, f"Maximum Value: {data1[len(data1)-1]}")
-    #     y -= 20
-    #     c.drawString(100, y, f"Arguments : {best_arguments}")
-    # else:
-    #     c.drawString(100, y, f"Minimum Value: {data1[len(data1)-1]}")
-    #     y -= 30
-    #     c.drawString(100, y, f"Arguments : {best_arguments}")
+    c.setFont("Helvetica", 16)
+    if result.maximization:
+        c.drawString(100, y, f"Maximum Value: {data1[len(data1)-1]}")
+        y -= 20
+        c.drawString(100, y, f"Arguments : {best_arguments}")
+    else:
+        c.drawString(100, y, f"Minimum Value: {data1[len(data1)-1]}")
+        y -= 30
+        c.drawString(100, y, f"Arguments : {best_arguments}")
     
-    # c.showPage()
-    # y = 730
-    # c.setFont("Helvetica", 16)
-    # c.drawString(100, y, f"Graphs:")
-    # y -= 300
+    c.showPage()
+    y = 730
+    c.setFont("Helvetica", 16)
+    c.drawString(100, y, f"Graphs:")
+    y -= 300
 
-    # indices = range(len(data1))
+    indices = range(len(data1))
     
-    # plt.plot(indices, data1)
-    # plt.xlabel('Epoch')
-    # plt.ylabel('Best Value')
-    # plt.title('Dependence of the Best Function Value on the Epoch')
-    # plt.grid(True)
-    # plt.savefig('plot1.png', format='png')
-    # plt.close()
-    # c.drawImage('plot1.png', 100, y, width=400, height=300)
+    plt.plot(indices, data1)
+    plt.xlabel('Epoch')
+    plt.ylabel('Best Value')
+    plt.title('Dependence of the Best Function Value on the Epoch')
+    plt.grid(True)
+    plt.savefig('plot1.png', format='png')
+    plt.close()
+    c.drawImage('plot1.png', 100, y, width=400, height=300)
 
-    # y -= 350
+    y -= 350
 
-    # plt.plot(indices, data2)
-    # plt.xlabel('Epoch')
-    # plt.ylabel('Average Value')
-    # plt.title('Dependence of the Average Function Value on the Epoch')
-    # plt.grid(True)
-    # plt.savefig('plot2.png', format='png')
-    # plt.close()
-    # c.drawImage('plot2.png', 100, y, width=400, height=300)
+    plt.plot(indices, data2)
+    plt.xlabel('Epoch')
+    plt.ylabel('Average Value')
+    plt.title('Dependence of the Average Function Value on the Epoch')
+    plt.grid(True)
+    plt.savefig('plot2.png', format='png')
+    plt.close()
+    c.drawImage('plot2.png', 100, y, width=400, height=300)
 
-    # c.showPage()
-    # y = 400
-    # plt.plot(indices, data3)
-    # plt.xlabel('Epoch')
-    # plt.ylabel('Standard Deviations Value')
-    # plt.title('Dependence of the Standard deviation Value on the Epoch')
-    # plt.grid(True)
-    # plt.savefig('plot3.png', format='png')
-    # plt.close()
-    # c.drawImage('plot3.png', 100, y, width=400, height=300)
+    c.showPage()
+    y = 400
+    plt.plot(indices, data3)
+    plt.xlabel('Epoch')
+    plt.ylabel('Standard Deviations Value')
+    plt.title('Dependence of the Standard deviation Value on the Epoch')
+    plt.grid(True)
+    plt.savefig('plot3.png', format='png')
+    plt.close()
+    c.drawImage('plot3.png', 100, y, width=400, height=300)
     
-    # c.save()
-    # pdf_content = buffer.getvalue()
-    # buffer.close()
-    # return pdf_content
+    c.save()
+    pdf_content = buffer.getvalue()
+    buffer.close()
+    return pdf_content
 
 
     
@@ -211,13 +205,13 @@ def chooseMutationMethod(method_name):
         case 'uniform':
             return UniformMutation()
         case 'gauss':
-            return GaussMuation()
+            return GaussMutation()
         
 
 def chooseSelectionMethod(method_name, chromosome_amout, maximization ):
     match method_name:
         case 'best':
-            return RealBestSelection(maximization)
+            return RealBestSelection()
         case 'roulette':
             return RealRouletteWheelSelection()
         case 'tournament':
