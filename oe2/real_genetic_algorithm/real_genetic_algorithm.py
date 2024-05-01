@@ -6,7 +6,7 @@ from timeit import default_timer as timer
 from real_genetic_algorithm.real_genetic_algorithm_configuration import RealGeneticAlgorithmConfiguration
 from real_genetic_algorithm.chromosomes.real_chromosome import generate_real_chromosomes
 from real_genetic_algorithm.inversion.real_inversion import inversion
-
+from real_genetic_algorithm.crossovers.king_stratrgy_crossover import KingStrategyCrossover
 
 class RealGeneticAlgorithm:
     def __init__(self, configuration: RealGeneticAlgorithmConfiguration):
@@ -33,7 +33,7 @@ class RealGeneticAlgorithm:
                                                           self.configuration.fitness_function,
                                                           self.configuration.maximization)
 
-            offspring = self.create_new_population(parents)
+            offspring = self.create_new_population(parents, best_candidate)
 
             # Perform mutation
             offspring = [self.configuration.mutation.mutation(child, self.configuration.mutation_rate) for child in
@@ -80,9 +80,11 @@ class RealGeneticAlgorithm:
     def calculate_std_value(self, population):
         return statistics.pstdev([individual.calculate_value() for individual in population])
 
-    def create_new_population(self, candidates):
+    def create_new_population(self, candidates, best_candidate):
         new_population = []
         new_population_size = self.configuration.population_size - self.configuration.elite_chromosome_count
+        if isinstance(self.configuration.crossover, KingStrategyCrossover):
+            self.configuration.crossover = KingStrategyCrossover(best_candidate)
         while len(new_population) < new_population_size:
             left, right = random.sample(candidates, 2)
             if random.random() < self.configuration.crossover_rate:
