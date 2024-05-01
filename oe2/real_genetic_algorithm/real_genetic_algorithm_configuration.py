@@ -22,6 +22,7 @@ class RealGeneticAlgorithmConfiguration:
                  crossover_rate: float,
                  mutation_rate: float,
                  inversion_rate: float,
+                 tournament_size: int,
                  selection_count: int,
                  maximization: bool):
         self.fitness_function = fitness_function
@@ -41,5 +42,6 @@ class RealGeneticAlgorithmConfiguration:
         self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
         self.inversion_rate = inversion_rate
+        self.tournament_size = tournament_size
         self.selection_count = selection_count
         self.maximization = maximization

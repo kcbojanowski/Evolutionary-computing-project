@@ -49,6 +49,7 @@ def real_genetic_algorithm(request):
             crossover_rate = float(request.POST.get('crossover-rate')),
             mutation_rate = float(request.POST.get('mutation-rate')),
             inversion_rate = float(request.POST.get('inversion-rate')),
+            tournament_size = int(request.POST.get('tournament-size')),
             selection_method = request.POST.get('selection-method'),
             crossover_method = request.POST.get('crossover-method'),
             mutation_method = request.POST.get('mutation-method'),
@@ -62,7 +63,7 @@ def real_genetic_algorithm(request):
         fitness_function = result.function
         crossover = chooseCrossoverMethod(result.crossover_method)
         mutation = chooseMutationMethod(result.mutation_method)
-        selection = chooseSelectionMethod(result.selection_method, result.selection_amount, result.maximization)
+        selection = chooseSelectionMethod(result.selection_method, result.tournament_size)
 
         algorithm_config = RealGeneticAlgorithmConfiguration(
             fitness_function=fitness_function, ##remember that fitnessfunction is a string now
@@ -78,6 +79,7 @@ def real_genetic_algorithm(request):
             crossover_rate=result.crossover_rate,
             mutation_rate=result.mutation_rate,
             inversion_rate=result.inversion_rate,
+            tournament_size=result.tournament_size,
             selection_count=result.selection_amount,
             maximization=result.maximization
         )
@@ -121,6 +123,8 @@ def generate_pdf(data1, data2, data3, best_arguments, result):
     c.drawString(100, y, f"Mutation rate: {result.mutation_rate}")
     y -= 20
     c.drawString(100, y, f"Inversion rate: {result.inversion_rate}")
+    y -= 20
+    c.drawString(100, y, f"Tournament size: {result.tournament_size}")
     y -= 20
     c.drawString(100, y, f"Selection method: {result.selection_method}")
     y -= 20
@@ -212,14 +216,14 @@ def chooseMutationMethod(method_name):
             return GaussMutation()
 
 
-def chooseSelectionMethod(method_name, chromosome_amout, maximization ):
+def chooseSelectionMethod(method_name, tournament_size):
     match method_name:
         case 'best':
             return RealBestSelection()
         case 'roulette':
             return RealRouletteWheelSelection()
         case 'tournament':
-            return RealTournamentSelection(chromosome_amout, maximization)
+            return RealTournamentSelection(tournament_size)
 
 
 

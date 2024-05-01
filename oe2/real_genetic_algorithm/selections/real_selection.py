@@ -1,4 +1,4 @@
-from typing import List
+import random
 import numpy as np
 from real_genetic_algorithm.chromosomes.real_candidates import RealCandidates
 
@@ -27,13 +27,16 @@ class RealRouletteWheelSelection(RealSelection):
 
 
 class RealTournamentSelection(RealSelection):
+    def __init__(self, tournament_size: int):
+        self.tournament_size = tournament_size
+
     def select(self, population: RealCandidates, num_select: int, fitness_function: str, maximization: bool):
         selected = []
         for _ in range(num_select):
-            participants = np.random.choice(population, size=num_select)
+            tournament = random.sample(population, self.tournament_size)
             if maximization:
-                winner = max(participants, key=lambda individual: individual.calculate_value())
+                winner = max(tournament, key=lambda individual: individual.calculate_value())
             else:
-                winner = min(participants, key=lambda individual: individual.calculate_value())
+                winner = min(tournament, key=lambda individual: individual.calculate_value())
             selected.append(winner)
         return selected
