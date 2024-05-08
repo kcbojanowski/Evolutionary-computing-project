@@ -17,7 +17,7 @@ class GeneticAlgorithmResult(models.Model):
     crossover_rate = models.FloatField()
     mutation_rate = models.FloatField()
     inversion_rate = models.FloatField()
-    tournament_size = models.IntegerField()
+    tournament_size = models.IntegerField(null=True, default=20)
     selection_method = models.CharField(max_length=100)
     crossover_method = models.CharField(max_length=100)
     mutation_method = models.CharField(max_length=100)

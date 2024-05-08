@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='geneticalgorithmresult',
             name='tournament_size',
-            field=models.IntegerField(default=20),
+            field=models.IntegerField(null=True, default=20),
             preserve_default=False,
         ),
     ]
